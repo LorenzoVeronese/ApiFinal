@@ -43,6 +43,7 @@ Ptr_queue* build_priority_queue(int n);
 void print_priority_queue(Ptr_queue* ptr_queue, int n);
 void clear_priority_queue(Ptr_queue* ptr_queue, int n);
 void min_heapify(Ptr_queue* ptr_queue, int to_move, int n);
+min min_heapify_modified(Ptr_queue* ptr_queue, int to_move, int n)
 uint search_in_priority_queue(Ptr_queue* ptr_queue, int to_search, int n);
 void delete_element_priority_queue(Ptr_queue* ptr_queue, int to_remove, int* n);
 
@@ -392,6 +393,21 @@ void min_heapify(Ptr_queue* ptr_queue, int to_move, int n){
 }*/
 
 
+min min_heapify_modified(Ptr_queue* ptr_queue, int to_move, int n){
+	int parent;
+
+	parent = (int)(to_move / 2);
+
+	if(parent != 0 && ptr_queue[parent] -> dist > ptr_queue[to_move] -> dist){
+		temp = ptr_queue[to_move];
+		ptr_queue[to_move] = ptr_queue[parent];
+		ptr_queue[parent] = temp;
+
+		min_heapify(ptr_queue, parent, n);
+	}
+}
+
+
 void min_heapify(Ptr_queue* ptr_queue, int to_move, int n){
 	Ptr_queue temp;
 	int i;
@@ -455,8 +471,10 @@ void dijkstra(uint** ptr_matr, Ptr_queue* ptr_queue, int n){
     uint* curr_node;
     uint ndis;
     uint curr, to_reach;
-    int j, n_queue;
-
+    int j, n_queue, modified;
+	//modified contiene il numero dei nodi che sono stati modificati: se tale numero
+	// è maggiore di n, allora posso usare la min_heapify normale
+	modified = 1; //lo 0 lo considero modificato
 	n_queue = n;
 	while(n_queue != 0){
 		//Seleziono il nodo di partenza
@@ -473,7 +491,12 @@ void dijkstra(uint** ptr_matr, Ptr_queue* ptr_queue, int n){
 					ptr_queue[to_reach] -> dist = ndis;
 					//D printf("Prima della min_heapify:\n");
 					//D print_priority_queue(ptr_queue, n_queue);
-					min_heapify(ptr_queue, to_reach, n_queue);
+					if(modified < n){
+						min_heapify_modified(ptr_queue, to_reach, n_queue);
+					}
+					else{
+						min_heapify(ptr_queue, to_reach, n_queue);
+					}
 					//D printf("Dopo la min_heapify:\n");
 					//D print_priority_queue(ptr_queue, n_queue);
 				}
