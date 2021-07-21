@@ -472,10 +472,10 @@ void dijkstra(uint** ptr_matr, Ptr_queue* ptr_queue, int n){
     uint* curr_node;
     uint ndis;
     uint curr, to_reach;
-    int j, n_queue, modified;
+    int j, n_queue;
 	//modified contiene il numero dei nodi che sono stati modificati: se tale numero
 	// è maggiore di n, allora posso usare la min_heapify normale
-	modified = 1; //lo 0 lo considero modificato
+	//modified = 1; //lo 0 lo considero modificato
 	n_queue = n;
 	while(n_queue != 0){
 		//Seleziono il nodo di partenza
@@ -492,12 +492,8 @@ void dijkstra(uint** ptr_matr, Ptr_queue* ptr_queue, int n){
 					ptr_queue[to_reach] -> dist = ndis;
 					//D printf("Prima della min_heapify:\n");
 					//D print_priority_queue(ptr_queue, n_queue);
-					if(modified < n){
-						min_heapify_modified(ptr_queue, to_reach, n_queue);
-					}
-					else{
-						min_heapify(ptr_queue, to_reach, n_queue);
-					}
+
+					min_heapify_modified(ptr_queue, to_reach, n_queue);
 					//D printf("Dopo la min_heapify:\n");
 					//D print_priority_queue(ptr_queue, n_queue);
 				}

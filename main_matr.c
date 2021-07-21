@@ -51,6 +51,9 @@ void dijkstra(uint** ptr_matr, Ptr_queue* ptr_queue, int n);
 
 int somma(Ptr_queue* ptr_queue, int n);
 
+void max_heapify(Ptr_queue* ptr_queue, int to_move, int n);
+void max_heapify_modified(Ptr_queue* ptr_queue, int to_move, int n);
+
 
 int main(){
     int n, //numero nodi
@@ -197,8 +200,20 @@ Ptr_queue* build_ranking(int k){
 
 
 void add_ranked(Ptr_queue* ranking, int graph_num, int distance, int k){
-	int i, max, max_index;
 
+	if(graph_num < k){
+		ranking[graph_num] -> key = graph_num;
+		ranking[graph_num] -> dist = distance;
+		max_heapify_modified(ranking, graph_num, k);
+	}
+	else{
+		if(ranking[0] -> dist > distance){
+			ranking[0] -> key = graph_num;
+			ranking[0] -> dist = distance;
+			max_heapify(ranking, 0, k);
+		}
+	}
+	/*
 	if(ranking[k - 1] -> key != (uint)INFINITY){
 		//Cerco il max
 		max = ranking[0] -> dist;
@@ -219,7 +234,7 @@ void add_ranked(Ptr_queue* ranking, int graph_num, int distance, int k){
 		for(i = 0; ranking[i] -> key != (uint)INFINITY; i++){}
 		ranking[i] -> key = graph_num;
 		ranking[i] -> dist = distance;
-	}
+	}*/
 }
 
 
@@ -472,10 +487,10 @@ void dijkstra(uint** ptr_matr, Ptr_queue* ptr_queue, int n){
     uint* curr_node;
     uint ndis;
     uint curr, to_reach;
-    int j, n_queue, modified;
+    int j, n_queue;
 	//modified contiene il numero dei nodi che sono stati modificati: se tale numero
 	// è maggiore di n, allora posso usare la min_heapify normale
-	modified = 1; //lo 0 lo considero modificato
+	//modified = 1; //lo 0 lo considero modificato
 	n_queue = n;
 	while(n_queue != 0){
 		//Seleziono il nodo di partenza
@@ -492,12 +507,10 @@ void dijkstra(uint** ptr_matr, Ptr_queue* ptr_queue, int n){
 					ptr_queue[to_reach] -> dist = ndis;
 					//D printf("Prima della min_heapify:\n");
 					//D print_priority_queue(ptr_queue, n_queue);
-					if(modified < n){
-						min_heapify_modified(ptr_queue, to_reach, n_queue);
-					}
-					else{
-						min_heapify(ptr_queue, to_reach, n_queue);
-					}
+
+					min_heapify_modified(ptr_queue, to_reach, n_queue);
+
+
 					//D printf("Dopo la min_heapify:\n");
 					//D print_priority_queue(ptr_queue, n_queue);
 				}
@@ -563,4 +576,53 @@ int somma(Ptr_queue* ptr_queue, int n){
 	}
 
 	return somma;
+}
+
+
+
+//Vedi slide 6 "data_structures_3"
+void max_heapify(Ptr_queue* ptr_queue, int to_move, int n){
+	uint left, right, posmin;
+	Ptr_queue temp;
+
+	//Il nodo 0 lo devo considerare come 1, altrimenti non trovo
+	// il left e il right
+	left = 2 * (to_move + 1) - 1;
+	right = 2 * (to_move + 1);
+
+
+	if(left < n && ptr_queue[left] -> dist > ptr_queue[to_move] -> dist){
+		posmin = left;
+	}
+	else{
+		posmin = to_move;
+	}
+
+	if(right < n && ptr_queue[right] -> dist > ptr_queue[posmin] -> dist){
+		posmin = right;
+	}
+
+	if(posmin != to_move){
+		temp = ptr_queue[to_move];
+		ptr_queue[to_move] = ptr_queue[posmin];
+		ptr_queue[posmin] = temp;
+
+		min_heapify(ptr_queue, posmin, n);
+	}
+}
+
+
+void max_heapify_modified(Ptr_queue* ptr_queue, int to_move, int n){
+	int parent;
+	Ptr_queue temp;
+
+	parent = (int)((to_move + 1) / 2);
+
+	if(ptr_queue[parent] -> dist < ptr_queue[to_move] -> dist){
+		temp = ptr_queue[to_move];
+		ptr_queue[to_move] = ptr_queue[parent];
+		ptr_queue[parent] = temp;
+
+		max_heapify_modified(ptr_queue, parent, n);
+	}
 }
