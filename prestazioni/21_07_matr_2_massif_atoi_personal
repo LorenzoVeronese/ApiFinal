@@ -1,0 +1,549 @@
+desc: --massif-out-file=outputfile
+cmd: ./main
+time_unit: i
+#-----------
+snapshot=0
+#-----------
+time=0
+mem_heap_B=0
+mem_heap_extra_B=0
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=1
+#-----------
+time=140201
+mem_heap_B=1024
+mem_heap_extra_B=8
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=2
+#-----------
+time=141751
+mem_heap_B=9024
+mem_heap_extra_B=16
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=3
+#-----------
+time=144148
+mem_heap_B=9528
+mem_heap_extra_B=1024
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=4
+#-----------
+time=146580
+mem_heap_B=10040
+mem_heap_extra_B=2048
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=5
+#-----------
+time=147796
+mem_heap_B=10296
+mem_heap_extra_B=2560
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=6
+#-----------
+time=149240
+mem_heap_B=10600
+mem_heap_extra_B=3168
+mem_stacks_B=0
+heap_tree=detailed
+n3: 10600 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 8000 0x109546: build_ranking (main_matr.c:184)
+  n0: 8000 0x109191: main (main_matr.c:71)
+ n1: 1576 0x10956D: build_ranking (main_matr.c:188)
+  n0: 1576 0x109191: main (main_matr.c:71)
+ n1: 1024 0x48DAE83: _IO_file_doallocate (filedoalloc.c:101)
+  n1: 1024 0x48EB04F: _IO_doallocbuf (genops.c:347)
+   n1: 1024 0x48E9E23: _IO_file_underflow@@GLIBC_2.2.5 (fileops.c:486)
+    n1: 1024 0x48EB105: _IO_default_uflow (genops.c:362)
+     n1: 1024 0x48BD3FF: __vfscanf_internal (vfscanf-internal.c:627)
+      n1: 1024 0x48BC2E1: __isoc99_scanf (isoc99_scanf.c:30)
+       n0: 1024 0x109188: main (main_matr.c:68)
+#-----------
+snapshot=7
+#-----------
+time=150456
+mem_heap_B=10856
+mem_heap_extra_B=3680
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=8
+#-----------
+time=151672
+mem_heap_B=11112
+mem_heap_extra_B=4192
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=9
+#-----------
+time=152888
+mem_heap_B=11368
+mem_heap_extra_B=4704
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=10
+#-----------
+time=154104
+mem_heap_B=11624
+mem_heap_extra_B=5216
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=11
+#-----------
+time=155320
+mem_heap_B=11880
+mem_heap_extra_B=5728
+mem_stacks_B=0
+heap_tree=detailed
+n3: 11880 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 8000 0x109546: build_ranking (main_matr.c:184)
+  n0: 8000 0x109191: main (main_matr.c:71)
+ n1: 2856 0x10956D: build_ranking (main_matr.c:188)
+  n0: 2856 0x109191: main (main_matr.c:71)
+ n1: 1024 0x48DAE83: _IO_file_doallocate (filedoalloc.c:101)
+  n1: 1024 0x48EB04F: _IO_doallocbuf (genops.c:347)
+   n1: 1024 0x48E9E23: _IO_file_underflow@@GLIBC_2.2.5 (fileops.c:486)
+    n1: 1024 0x48EB105: _IO_default_uflow (genops.c:362)
+     n1: 1024 0x48BD3FF: __vfscanf_internal (vfscanf-internal.c:627)
+      n1: 1024 0x48BC2E1: __isoc99_scanf (isoc99_scanf.c:30)
+       n0: 1024 0x109188: main (main_matr.c:68)
+#-----------
+snapshot=12
+#-----------
+time=156536
+mem_heap_B=12136
+mem_heap_extra_B=6240
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=13
+#-----------
+time=157752
+mem_heap_B=12392
+mem_heap_extra_B=6752
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=14
+#-----------
+time=158968
+mem_heap_B=12648
+mem_heap_extra_B=7264
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=15
+#-----------
+time=160184
+mem_heap_B=12904
+mem_heap_extra_B=7776
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=16
+#-----------
+time=161400
+mem_heap_B=13160
+mem_heap_extra_B=8288
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=17
+#-----------
+time=162616
+mem_heap_B=13416
+mem_heap_extra_B=8800
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=18
+#-----------
+time=163832
+mem_heap_B=13672
+mem_heap_extra_B=9312
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=19
+#-----------
+time=165048
+mem_heap_B=13928
+mem_heap_extra_B=9824
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=20
+#-----------
+time=166264
+mem_heap_B=14184
+mem_heap_extra_B=10336
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=21
+#-----------
+time=167480
+mem_heap_B=14440
+mem_heap_extra_B=10848
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=22
+#-----------
+time=168696
+mem_heap_B=14696
+mem_heap_extra_B=11360
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=23
+#-----------
+time=169912
+mem_heap_B=14952
+mem_heap_extra_B=11872
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=24
+#-----------
+time=172040
+mem_heap_B=15400
+mem_heap_extra_B=12768
+mem_stacks_B=0
+heap_tree=detailed
+n3: 15400 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 8000 0x109546: build_ranking (main_matr.c:184)
+  n0: 8000 0x109191: main (main_matr.c:71)
+ n1: 6376 0x10956D: build_ranking (main_matr.c:188)
+  n0: 6376 0x109191: main (main_matr.c:71)
+ n1: 1024 0x48DAE83: _IO_file_doallocate (filedoalloc.c:101)
+  n1: 1024 0x48EB04F: _IO_doallocbuf (genops.c:347)
+   n1: 1024 0x48E9E23: _IO_file_underflow@@GLIBC_2.2.5 (fileops.c:486)
+    n1: 1024 0x48EB105: _IO_default_uflow (genops.c:362)
+     n1: 1024 0x48BD3FF: __vfscanf_internal (vfscanf-internal.c:627)
+      n1: 1024 0x48BC2E1: __isoc99_scanf (isoc99_scanf.c:30)
+       n0: 1024 0x109188: main (main_matr.c:68)
+#-----------
+snapshot=25
+#-----------
+time=173256
+mem_heap_B=15656
+mem_heap_extra_B=13280
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=26
+#-----------
+time=174472
+mem_heap_B=15912
+mem_heap_extra_B=13792
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=27
+#-----------
+time=175688
+mem_heap_B=16168
+mem_heap_extra_B=14304
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=28
+#-----------
+time=176904
+mem_heap_B=16424
+mem_heap_extra_B=14816
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=29
+#-----------
+time=178120
+mem_heap_B=16680
+mem_heap_extra_B=15328
+mem_stacks_B=0
+heap_tree=detailed
+n3: 16680 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 8000 0x109546: build_ranking (main_matr.c:184)
+  n0: 8000 0x109191: main (main_matr.c:71)
+ n1: 7656 0x10956D: build_ranking (main_matr.c:188)
+  n0: 7656 0x109191: main (main_matr.c:71)
+ n1: 1024 0x48DAE83: _IO_file_doallocate (filedoalloc.c:101)
+  n1: 1024 0x48EB04F: _IO_doallocbuf (genops.c:347)
+   n1: 1024 0x48E9E23: _IO_file_underflow@@GLIBC_2.2.5 (fileops.c:486)
+    n1: 1024 0x48EB105: _IO_default_uflow (genops.c:362)
+     n1: 1024 0x48BD3FF: __vfscanf_internal (vfscanf-internal.c:627)
+      n1: 1024 0x48BC2E1: __isoc99_scanf (isoc99_scanf.c:30)
+       n0: 1024 0x109188: main (main_matr.c:68)
+#-----------
+snapshot=30
+#-----------
+time=179336
+mem_heap_B=16936
+mem_heap_extra_B=15840
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=31
+#-----------
+time=180589
+mem_heap_B=53824
+mem_heap_extra_B=16192
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=32
+#-----------
+time=181847
+mem_heap_B=108224
+mem_heap_extra_B=16464
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=33
+#-----------
+time=183105
+mem_heap_B=162624
+mem_heap_extra_B=16736
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=34
+#-----------
+time=184363
+mem_heap_B=217024
+mem_heap_extra_B=17008
+mem_stacks_B=0
+heap_tree=detailed
+n5: 217024 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 196800 0x10966B: create_adjacency_matr (main_matr.c:232)
+  n0: 196800 0x10919D: main (main_matr.c:74)
+ n1: 8000 0x109546: build_ranking (main_matr.c:184)
+  n0: 8000 0x109191: main (main_matr.c:71)
+ n1: 8000 0x10956D: build_ranking (main_matr.c:188)
+  n0: 8000 0x109191: main (main_matr.c:71)
+ n1: 3200 0x10963D: create_adjacency_matr (main_matr.c:230)
+  n0: 3200 0x10919D: main (main_matr.c:74)
+ n0: 1024 in 1 place, below massif's threshold (1.00%)
+#-----------
+snapshot=35
+#-----------
+time=185621
+mem_heap_B=271424
+mem_heap_extra_B=17280
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=36
+#-----------
+time=186879
+mem_heap_B=325824
+mem_heap_extra_B=17552
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=37
+#-----------
+time=188137
+mem_heap_B=380224
+mem_heap_extra_B=17824
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=38
+#-----------
+time=189395
+mem_heap_B=434624
+mem_heap_extra_B=18096
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=39
+#-----------
+time=190653
+mem_heap_B=489024
+mem_heap_extra_B=18368
+mem_stacks_B=0
+heap_tree=detailed
+n4: 489024 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 468800 0x10966B: create_adjacency_matr (main_matr.c:232)
+  n0: 468800 0x10919D: main (main_matr.c:74)
+ n1: 8000 0x109546: build_ranking (main_matr.c:184)
+  n0: 8000 0x109191: main (main_matr.c:71)
+ n1: 8000 0x10956D: build_ranking (main_matr.c:188)
+  n0: 8000 0x109191: main (main_matr.c:71)
+ n0: 4224 in 2 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=40
+#-----------
+time=191911
+mem_heap_B=543424
+mem_heap_extra_B=18640
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=41
+#-----------
+time=193169
+mem_heap_B=597824
+mem_heap_extra_B=18912
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=42
+#-----------
+time=194427
+mem_heap_B=652224
+mem_heap_extra_B=19184
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=43
+#-----------
+time=195674
+mem_heap_B=663632
+mem_heap_extra_B=19648
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=44
+#-----------
+time=196922
+mem_heap_B=663888
+mem_heap_extra_B=20160
+mem_stacks_B=0
+heap_tree=detailed
+n4: 663888 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 640000 0x10966B: create_adjacency_matr (main_matr.c:232)
+  n0: 640000 0x10919D: main (main_matr.c:74)
+ n1: 8000 0x109546: build_ranking (main_matr.c:184)
+  n0: 8000 0x109191: main (main_matr.c:71)
+ n1: 8000 0x10956D: build_ranking (main_matr.c:188)
+  n0: 8000 0x109191: main (main_matr.c:71)
+ n0: 7888 in 5 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=45
+#-----------
+time=198170
+mem_heap_B=664144
+mem_heap_extra_B=20672
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=46
+#-----------
+time=199418
+mem_heap_B=664400
+mem_heap_extra_B=21184
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=47
+#-----------
+time=200666
+mem_heap_B=664656
+mem_heap_extra_B=21696
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=48
+#-----------
+time=201914
+mem_heap_B=664912
+mem_heap_extra_B=22208
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=49
+#-----------
+time=203162
+mem_heap_B=665168
+mem_heap_extra_B=22720
+mem_stacks_B=0
+heap_tree=detailed
+n4: 665168 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 640000 0x10966B: create_adjacency_matr (main_matr.c:232)
+  n0: 640000 0x10919D: main (main_matr.c:74)
+ n0: 9168 in 5 places, all below massif's threshold (1.00%)
+ n1: 8000 0x109546: build_ranking (main_matr.c:184)
+  n0: 8000 0x109191: main (main_matr.c:71)
+ n1: 8000 0x10956D: build_ranking (main_matr.c:188)
+  n0: 8000 0x109191: main (main_matr.c:71)
+#-----------
+snapshot=50
+#-----------
+time=204410
+mem_heap_B=665424
+mem_heap_extra_B=23232
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=51
+#-----------
+time=205658
+mem_heap_B=665680
+mem_heap_extra_B=23744
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=52
+#-----------
+time=206906
+mem_heap_B=665936
+mem_heap_extra_B=24256
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=53
+#-----------
+time=208154
+mem_heap_B=666192
+mem_heap_extra_B=24768
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=54
+#-----------
+time=209402
+mem_heap_B=666448
+mem_heap_extra_B=25280
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=55
+#-----------
+time=1076457028
+mem_heap_B=667648
+mem_heap_extra_B=25640
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=56
+#-----------
+time=5630973855
+mem_heap_B=667648
+mem_heap_extra_B=25640
+mem_stacks_B=0
+heap_tree=peak
+n4: 667648 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 640000 0x10966B: create_adjacency_matr (main_matr.c:232)
+  n0: 640000 0x10919D: main (main_matr.c:74)
+ n0: 11648 in 5 places, all below massif's threshold (1.00%)
+ n1: 8000 0x109546: build_ranking (main_matr.c:184)
+  n0: 8000 0x109191: main (main_matr.c:71)
+ n1: 8000 0x10956D: build_ranking (main_matr.c:188)
+  n0: 8000 0x109191: main (main_matr.c:71)
