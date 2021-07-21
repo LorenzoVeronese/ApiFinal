@@ -43,7 +43,7 @@ Ptr_queue* build_priority_queue(int n);
 void print_priority_queue(Ptr_queue* ptr_queue, int n);
 void clear_priority_queue(Ptr_queue* ptr_queue, int n);
 void min_heapify(Ptr_queue* ptr_queue, int to_move, int n);
-min min_heapify_modified(Ptr_queue* ptr_queue, int to_move, int n)
+void min_heapify_modified(Ptr_queue* ptr_queue, int to_move, int n);
 uint search_in_priority_queue(Ptr_queue* ptr_queue, int to_search, int n);
 void delete_element_priority_queue(Ptr_queue* ptr_queue, int to_remove, int* n);
 
@@ -360,7 +360,7 @@ void print_priority_queue(Ptr_queue* ptr_queue, int n){
 	}
 }
 
-/*
+
 //Vedi slide 6 "data_structures_3"
 void min_heapify(Ptr_queue* ptr_queue, int to_move, int n){
 	uint left, right, posmin;
@@ -390,11 +390,12 @@ void min_heapify(Ptr_queue* ptr_queue, int to_move, int n){
 
 		min_heapify(ptr_queue, posmin, n);
 	}
-}*/
+}
 
 
-min min_heapify_modified(Ptr_queue* ptr_queue, int to_move, int n){
+void min_heapify_modified(Ptr_queue* ptr_queue, int to_move, int n){
 	int parent;
+	Ptr_queue temp;
 
 	parent = (int)(to_move / 2);
 
@@ -403,11 +404,11 @@ min min_heapify_modified(Ptr_queue* ptr_queue, int to_move, int n){
 		ptr_queue[to_move] = ptr_queue[parent];
 		ptr_queue[parent] = temp;
 
-		min_heapify(ptr_queue, parent, n);
+		min_heapify_modified(ptr_queue, parent, n);
 	}
 }
 
-
+/*
 void min_heapify(Ptr_queue* ptr_queue, int to_move, int n){
 	Ptr_queue temp;
 	int i;
@@ -447,7 +448,7 @@ void min_heapify(Ptr_queue* ptr_queue, int to_move, int n){
 		}
 		i++;
 	}
-}
+}*/
 
 
 
