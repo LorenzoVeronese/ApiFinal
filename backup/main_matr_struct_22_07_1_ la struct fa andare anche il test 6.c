@@ -27,12 +27,6 @@ struct Queue{
 	uint dist;
 };
 
-struct Hash{
-	bool visited; //1 if visited
-	uint pos; //pos of that node in ptr_queue
-};
-
-
 int power(int base, int exp);
 uint atoi_personal(char* str, int h);
 
@@ -44,22 +38,23 @@ uint** create_adjacency_matr(int n);
 void build_adjacency_matr(uint** ptr_matr, int n);
 void print_adjacency_matr(uint** ptr_matr, int n);
 
-
-struct Hash* create_hash(int n);
+bool* create_checklist(int n);
 struct Queue* build_priority_queue(int n);
 void print_priority_queue(struct Queue* ptr_queue, int n);
-void clear_priority_queue(struct Queue* ptr_queue, struct Hash* hash, int n);
-void min_heapify(struct Queue* ptr_queue, struct Hash* hash, int to_move, int n);
-void min_heapify_modified(struct Queue* ptr_queue, struct Hash* hash, int to_move, int n);
-uint search_in_priority_queue(struct Queue* ptr_queue, struct Hash* hash, int to_search);
-void delete_element_priority_queue(struct Queue* ptr_queue, struct Hash* hash, int to_remove, int* n);
+void clear_priority_queue(struct Queue* ptr_queue, int n);
+void min_heapify(struct Queue* ptr_queue, int to_move, int n);
+void min_heapify_modified(struct Queue* ptr_queue, int to_move, int n);
+uint search_in_priority_queue(struct Queue* ptr_queue, int to_search, int n, bool* checklist);
+void delete_element_priority_queue(struct Queue* ptr_queue, int to_remove, int* n, bool* checklist);
 
-void dijkstra(uint** ptr_matr, struct Queue* ptr_queue, struct Hash* hash, int n);
+void dijkstra(uint** ptr_matr, struct Queue* ptr_queue, int n, bool* checklist);
 
 int somma(struct Queue* ptr_queue, int n);
 
 void max_heapify(struct Queue* ptr_queue, int to_move, int n);
 void max_heapify_modified(struct Queue* ptr_queue, int to_move, int n);
+
+void clear_checklist(bool* checklist, int n);
 
 void print_topk(struct Queue* ranking, int k);
 
@@ -74,8 +69,8 @@ int main(){
 	int sum; //somma cammini minimi
 	int j, h, flag;
 	int void_line;
+	bool* checklist;
 	char c;
-	struct Hash* hash;
 
 	flag = 0;
 
@@ -90,7 +85,7 @@ int main(){
 	//3.2 Costruisco queue (basta una volta sola) per algoritmo di Dijkstra
 	ptr_queue = build_priority_queue(n);
 	//D print_priority_queue(ptr_queue, n);
-	hash = create_hash(n);
+	checklist = create_checklist(n);
 	j = 0;
     //3. AGGIUNGI GRAFO O TOPK
     //AggiungiGrafo
@@ -152,13 +147,13 @@ int main(){
 
 
 			if(void_line == 0){
-				dijkstra(ptr_matr, ptr_queue, hash, n);
+				dijkstra(ptr_matr, ptr_queue, n, checklist);
 
 				sum = somma(ptr_queue, n);
 				//D printf("somma[%d]: %d\n", j, sum);
 				//ripulisco la coda
-				clear_priority_queue(ptr_queue, hash, n);
-
+				clear_priority_queue(ptr_queue, n);
+				clear_checklist(checklist, n);
 				//D printf("---nodo fatto\n");
 			}
 			//D printf("la somma è: %d\n", sum);
@@ -184,6 +179,14 @@ int main(){
     }
 
     return 0;
+}
+
+bool* create_checklist(int n){
+	bool* checklist;
+
+	checklist = (bool*)calloc(n, sizeof(bool));
+
+	return checklist;
 }
 
 
@@ -285,21 +288,6 @@ void print_ranking(struct Queue* ptr_queue, int n){
 }
 
 
-struct Hash* create_hash(int n){
-	struct Hash* hash;
-	int i;
-
-	hash = (struct Hash*)malloc(n * sizeof(struct Hash));
-
-	hash[0].visited = 0;
-	hash[0].pos = 0;
-	for(i = 1; i < n; i++){
-		hash[i].visited = 0;
-		hash[i].pos = i;
-	}
-
-	return hash;
-}
 
 
 uint** create_adjacency_matr(int n){
@@ -430,15 +418,12 @@ struct Queue* build_priority_queue(int n){
 }
 
 
-void delete_element_priority_queue(struct Queue* ptr_queue, struct Hash* hash, int to_remove, int* n_queue){
+void delete_element_priority_queue(struct Queue* ptr_queue, int to_remove, int* n_queue, bool* checklist){
 	struct Queue temp;
 
+	checklist[ptr_queue[to_remove].key] = 1;
+
 	*n_queue = *n_queue - 1;
-	//Modifico hash
-	hash[ptr_queue[*n_queue].key].pos = to_remove;
-	hash[ptr_queue[to_remove].key].pos = *n_queue;
-	hash[ptr_queue[to_remove].key].visited = 1;
-	//Modifico ptr_queue
 	temp = ptr_queue[to_remove];
 	ptr_queue[to_remove] = ptr_queue[*n_queue];
 	ptr_queue[*n_queue] = temp;
@@ -457,7 +442,7 @@ void print_priority_queue(struct Queue* ptr_queue, int n){
 
 
 //Vedi slide 6 "data_structures_3"
-void min_heapify(struct Queue* ptr_queue, struct Hash* hash, int to_move, int n){
+void min_heapify(struct Queue* ptr_queue, int to_move, int n){
 	uint left, right, posmin;
 	struct Queue temp;
 
@@ -479,35 +464,27 @@ void min_heapify(struct Queue* ptr_queue, struct Hash* hash, int to_move, int n)
 	}
 
 	if(posmin != to_move){
-		//Modifico hash
-		hash[ptr_queue[to_move].key].pos = posmin;
-		hash[ptr_queue[posmin].key].pos = to_move;
-		//Modifico ptr_queue
 		temp = ptr_queue[to_move];
 		ptr_queue[to_move] = ptr_queue[posmin];
 		ptr_queue[posmin] = temp;
 
-		min_heapify(ptr_queue, hash, posmin, n);
+		min_heapify(ptr_queue, posmin, n);
 	}
 }
 
 
-void min_heapify_modified(struct Queue* ptr_queue, struct Hash* hash, int to_move, int n){
+void min_heapify_modified(struct Queue* ptr_queue, int to_move, int n){
 	int parent;
 	struct Queue temp;
 
 	parent = (int)(to_move / 2);
 
 	if(parent != 0 && ptr_queue[parent].dist > ptr_queue[to_move].dist){
-		//Modifico hash table
-		hash[ptr_queue[parent].key].pos = to_move;
-		hash[ptr_queue[to_move].key].pos = parent;
-		//Modifico ptr_queue
 		temp = ptr_queue[to_move];
 		ptr_queue[to_move] = ptr_queue[parent];
 		ptr_queue[parent] = temp;
 
-		min_heapify_modified(ptr_queue, hash, parent, n);
+		min_heapify_modified(ptr_queue, parent, n);
 	}
 }
 
@@ -556,18 +533,26 @@ void min_heapify(struct Queue* ptr_queue, int to_move, int n){
 
 
 
-uint search_in_priority_queue(struct Queue* ptr_queue, struct Hash* hash, int to_search){
+uint search_in_priority_queue(struct Queue* ptr_queue, int to_search, int n, bool* checklist){
+	uint i;
 
-	if(hash[to_search].visited == 0){
-		return hash[to_search].pos;
-	}
-	else{
+
+	if(checklist[to_search] == 1){
 		return (uint)INFINITY;
 	}
+	for(i = 0; i < n; i++){
+		if(ptr_queue[i].key == to_search){
+			return i;
+		}
+	}
+
+	//non lo trovo
+	return (uint)INFINITY;
+
 }
 
 
-void dijkstra(uint** ptr_matr, struct Queue* ptr_queue, struct Hash* hash, int n){
+void dijkstra(uint** ptr_matr, struct Queue* ptr_queue, int n, bool* checklist){
     uint* curr_node;
     uint ndis;
     uint curr, to_reach;
@@ -587,13 +572,13 @@ void dijkstra(uint** ptr_matr, struct Queue* ptr_queue, struct Hash* hash, int n
 			if(curr_node[j] != 0){
 				ndis = ptr_queue[0].dist + curr_node[j];
 
-				to_reach = search_in_priority_queue(ptr_queue, hash, j + 1);
+				to_reach = search_in_priority_queue(ptr_queue, j + 1, n_queue, checklist);
 				if (to_reach != (uint)INFINITY && ptr_queue[to_reach].dist > ndis){
 					ptr_queue[to_reach].dist = ndis;
 					//D printf("Prima della min_heapify:\n");
 					//D print_priority_queue(ptr_queue, n_queue);
 
-					min_heapify_modified(ptr_queue, hash, to_reach, n_queue);
+					min_heapify_modified(ptr_queue, to_reach, n_queue);
 
 
 					//D printf("Dopo la min_heapify:\n");
@@ -602,31 +587,28 @@ void dijkstra(uint** ptr_matr, struct Queue* ptr_queue, struct Hash* hash, int n
 			}
 		}
 		//Elimino dalla coda il nodo di partenza
-		delete_element_priority_queue(ptr_queue, hash, 0, &n_queue);
+		delete_element_priority_queue(ptr_queue, 0, &n_queue, checklist);
 		//D printf("Elimino il primo\n");
 		//D printf("Prima della min_heapify esterna:\n");
 		//D print_priority_queue(ptr_queue, n_queue);
-		min_heapify(ptr_queue, hash, 0, n_queue);
+		min_heapify(ptr_queue, 0, n_queue);
 		//D printf("Dopo la min_heapify esterna:\n");
 		//D print_priority_queue(ptr_queue, n_queue);
 	}
 }
 
 
-void clear_priority_queue(struct Queue* ptr_queue, struct Hash* hash, int n){
+void clear_priority_queue(struct Queue* ptr_queue, int n){
 	int i;
 
 	//Metto il primo nodo alla fine (dove c'è lo zero)
-	hash[ptr_queue[0].key].pos = n - 1;
 	ptr_queue[n-1].key = ptr_queue[0].key;
 	ptr_queue[n-1].dist = (uint)INFINITY;
 
-	hash[0].pos = 0;
 	ptr_queue[0].key = 0;
 	ptr_queue[0].dist= 0;
 
 	for(i = 1; i < n - 1; i++){
-		hash[i].visited = 0;
 		ptr_queue[i].dist = (uint)INFINITY;
 
 	}
@@ -721,6 +703,15 @@ void max_heapify_modified(struct Queue* ptr_queue, int to_move, int n){
 		ptr_queue[parent] = temp;
 
 		max_heapify_modified(ptr_queue, parent, n);
+	}
+}
+
+
+void clear_checklist(bool* checklist, int n){
+	int i;
+
+	for(i = 1; i < n; i++){
+		checklist[i] = 0;
 	}
 }
 
