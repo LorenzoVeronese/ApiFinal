@@ -451,7 +451,7 @@ void print_priority_queue(struct Queue* ptr_queue, int n){
 
 	printf("Priority Queue:\n");
 	for(i = 0; i < n; i++){
-		printf("%d, %d\n", ptr_queue[i].key, ptr_queue[i].key);
+		printf("%d, %d\n", ptr_queue[i].key, ptr_queue[i].dist);
 	}
 }
 
@@ -619,13 +619,13 @@ void clear_priority_queue(struct Queue* ptr_queue, struct Hash* hash, int n){
 	//Metto il primo nodo alla fine (dove c'è lo zero)
 	hash[ptr_queue[0].key].pos = n - 1;
 	ptr_queue[n-1].key = ptr_queue[0].key;
-	ptr_queue[n-1].dist = (uint)INFINITY;
+	//ptr_queue[n-1].dist = (uint)INFINITY;
 
 	hash[0].pos = 0;
 	ptr_queue[0].key = 0;
 	ptr_queue[0].dist= 0;
 
-	for(i = 1; i < n - 1; i++){
+	for(i = 1; i < n; i++){
 		hash[i].visited = 0;
 		ptr_queue[i].dist = (uint)INFINITY;
 
