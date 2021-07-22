@@ -269,7 +269,7 @@ void build_adjacency_matr(uint** ptr_matr, int n){
     uint i, j, h, num; //supporto
 	char c;
 	char number[10];
-	uint len;
+	//uint len;
 
 	//Creo liste per ciascun nodo: nodo i-esimo collegato al j-esimo con costo num
 	for(i = 0; i < n; i++){
@@ -288,18 +288,25 @@ void build_adjacency_matr(uint** ptr_matr, int n){
 			//D printf("%s, %d\n", number, h);
 
 			//D printf("%d\n", num);
-            if(i == j || j == 0){
+
+            if(i == j){
                 ptr_matr[i][j] = 0;
             }
+			else if(j == 0){
+
+			}
             else{
 				num = atoi_personal(number, h);
-                ptr_matr[i][j] = num;
+            	ptr_matr[i][j] = num;
             }
 
+			//memset(number, 0, h); peggio: 27.30% vs 26.86%
+
+			/*non necessario per come ho fatto atoi personal: togliendolo scendo a 26.08%
 			len = h;
 			for(h = 0; h < len; h++){
 				number[h] = 0;
-			}
+			}*/
 		}
 
 		//L'ultimo numero lo leggo a parte
@@ -314,12 +321,15 @@ void build_adjacency_matr(uint** ptr_matr, int n){
 		}
 		num = atoi_personal(number, h);
 
-        ptr_matr[i][n - 1] = num;
+		ptr_matr[i][n - 1] = num;
 
+
+		//memset(number, 0, h);
+		/*
 		len = h;
 		for(h = 0; h < len; h++){
 			number[h] = 0;
-		}
+		}*/
 	}
 }
 
@@ -379,12 +389,7 @@ void print_priority_queue(Ptr_queue* ptr_queue, int n){
 
 	printf("Priority Queue:\n");
 	for(i = 0; i < n; i++){
-		if(ptr_queue[i] != NULL){
-			printf("%d, %d\n", ptr_queue[i] -> key, ptr_queue[i] -> dist);
-		}
-		else{
-			printf("deleted\n");
-		}
+		printf("%d, %d\n", ptr_queue[i] -> key, ptr_queue[i] -> dist);
 	}
 }
 
@@ -511,7 +516,7 @@ void dijkstra(uint** ptr_matr, Ptr_queue* ptr_queue, int n){
 
 		//Analizzo i successori del nodo corrente
 		curr_node = ptr_matr[curr];
-		for(j = 0; j < n; j++){
+		for(j = 1; j < n; j++){
 			if(curr_node[j] != 0){
 				ndis = ptr_queue[0] -> dist + curr_node[j];
 

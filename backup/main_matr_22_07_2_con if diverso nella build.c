@@ -33,6 +33,7 @@ uint atoi_personal(char* str, int h);
 
 Ptr_queue* build_ranking(int k);
 void add_ranked(Ptr_queue* ranking, int graph_num, int distance, int k);
+void print_ranking(Ptr_queue* ptr_queue, int n);
 
 uint** create_adjacency_matr(int n);
 void build_adjacency_matr(uint** ptr_matr, int n);
@@ -43,6 +44,7 @@ Ptr_queue* build_priority_queue(int n);
 void print_priority_queue(Ptr_queue* ptr_queue, int n);
 void clear_priority_queue(Ptr_queue* ptr_queue, int n);
 void min_heapify(Ptr_queue* ptr_queue, int to_move, int n);
+void min_heapify_modified(Ptr_queue* ptr_queue, int to_move, int n);
 uint search_in_priority_queue(Ptr_queue* ptr_queue, int to_search, int n);
 void delete_element_priority_queue(Ptr_queue* ptr_queue, int to_remove, int* n);
 
@@ -50,18 +52,20 @@ void dijkstra(uint** ptr_matr, Ptr_queue* ptr_queue, int n);
 
 int somma(Ptr_queue* ptr_queue, int n);
 
+void max_heapify(Ptr_queue* ptr_queue, int to_move, int n);
+void max_heapify_modified(Ptr_queue* ptr_queue, int to_move, int n);
+
 
 int main(){
     int n, //numero nodi
         k; //lunghezza classifica
     Ptr_queue* ranking; //array*1 con k migliori
-    //char key_word[MAXKEY]; //parola di stacco
+    char key_word[MAXKEY]; //parola di stacco
 	uint** ptr_matr; //array di puntatori alla liste
 	Ptr_queue* ptr_queue; //array (coda) di struct
 	int sum; //somma cammini minimi
 	int i, j, h, flag;
 	int void_line;
-	char c;
 
 	flag = 0;
 
@@ -82,8 +86,7 @@ int main(){
     while(1){
 		sum = 0;
 		//Leggo key word
-		c = fgetc(stdin);
-        if(c == EOF){
+        if(fgets(key_word, MAXKEY, stdin) == NULL){
 			break;
 		}
 		else if(flag == 1){
@@ -92,11 +95,7 @@ int main(){
 		}
 
 		//caso AggiungiGrafo
-
-        if (c == 'A'){
-			while(c != '\n'){
-				c = fgetc(stdin);
-			}
+        if (key_word[0] == 'A'){
 			//Leggo grafo
             build_adjacency_matr(ptr_matr, n);
 			//D print_adjacency_matr(ptr_matr, n);
@@ -122,14 +121,11 @@ int main(){
 			//D printf("la somma è: %d\n", sum);
 			//Inserisco somma in array*1
 			add_ranked(ranking, j, sum, k);
-
+			//D print_ranking(ranking, k);
 			j++;
         }
         //caso TopK
         else{
-			while(c != '\n'){
-				c = fgetc(stdin);
-			}
 			//D print_priority_queue(ranking, k);
 			if(ranking[0] -> key != (uint)INFINITY){
 				printf("%d", ranking[0] -> key);
@@ -205,8 +201,20 @@ Ptr_queue* build_ranking(int k){
 
 
 void add_ranked(Ptr_queue* ranking, int graph_num, int distance, int k){
-	int i, max, max_index;
 
+	if(graph_num < k){
+		ranking[graph_num] -> key = graph_num;
+		ranking[graph_num] -> dist = distance;
+		max_heapify_modified(ranking, graph_num, k);
+	}
+	else{
+		if(ranking[0] -> dist > distance){
+			ranking[0] -> key = graph_num;
+			ranking[0] -> dist = distance;
+			max_heapify(ranking, 0, k);
+		}
+	}
+	/*
 	if(ranking[k - 1] -> key != (uint)INFINITY){
 		//Cerco il max
 		max = ranking[0] -> dist;
@@ -227,8 +235,20 @@ void add_ranked(Ptr_queue* ranking, int graph_num, int distance, int k){
 		for(i = 0; ranking[i] -> key != (uint)INFINITY; i++){}
 		ranking[i] -> key = graph_num;
 		ranking[i] -> dist = distance;
+	}*/
+}
+
+
+void print_ranking(Ptr_queue* ptr_queue, int n){
+	int i;
+
+	printf("Ranking:\n");
+	for(i = 0; i < n; i++){
+		printf("%d, %d\n", ptr_queue[i] -> key, ptr_queue[i] -> dist);
 	}
 }
+
+
 
 
 uint** create_adjacency_matr(int n){
@@ -249,7 +269,7 @@ void build_adjacency_matr(uint** ptr_matr, int n){
     uint i, j, h, num; //supporto
 	char c;
 	char number[10];
-	uint len;
+	//uint len;
 
 	//Creo liste per ciascun nodo: nodo i-esimo collegato al j-esimo con costo num
 	for(i = 0; i < n; i++){
@@ -276,11 +296,13 @@ void build_adjacency_matr(uint** ptr_matr, int n){
                 ptr_matr[i][j] = num;
             }
 
+			//memset(number, 0, h); peggio: 27.30% vs 26.86%
 
+			/*non necessario per come ho fatto atoi personal
 			len = h;
 			for(h = 0; h < len; h++){
 				number[h] = 0;
-			}
+			}*/
 		}
 
 		//L'ultimo numero lo leggo a parte
@@ -297,11 +319,12 @@ void build_adjacency_matr(uint** ptr_matr, int n){
 
         ptr_matr[i][n - 1] = num;
 
-		
+		//memset(number, 0, h);
+		/*
 		len = h;
 		for(h = 0; h < len; h++){
 			number[h] = 0;
-		}
+		}*/
 	}
 }
 
@@ -361,16 +384,11 @@ void print_priority_queue(Ptr_queue* ptr_queue, int n){
 
 	printf("Priority Queue:\n");
 	for(i = 0; i < n; i++){
-		if(ptr_queue[i] != NULL){
-			printf("%d, %d\n", ptr_queue[i] -> key, ptr_queue[i] -> dist);
-		}
-		else{
-			printf("deleted\n");
-		}
+		printf("%d, %d\n", ptr_queue[i] -> key, ptr_queue[i] -> dist);
 	}
 }
 
-/*
+
 //Vedi slide 6 "data_structures_3"
 void min_heapify(Ptr_queue* ptr_queue, int to_move, int n){
 	uint left, right, posmin;
@@ -400,9 +418,25 @@ void min_heapify(Ptr_queue* ptr_queue, int to_move, int n){
 
 		min_heapify(ptr_queue, posmin, n);
 	}
-}*/
+}
 
 
+void min_heapify_modified(Ptr_queue* ptr_queue, int to_move, int n){
+	int parent;
+	Ptr_queue temp;
+
+	parent = (int)(to_move / 2);
+
+	if(parent != 0 && ptr_queue[parent] -> dist > ptr_queue[to_move] -> dist){
+		temp = ptr_queue[to_move];
+		ptr_queue[to_move] = ptr_queue[parent];
+		ptr_queue[parent] = temp;
+
+		min_heapify_modified(ptr_queue, parent, n);
+	}
+}
+
+/*
 void min_heapify(Ptr_queue* ptr_queue, int to_move, int n){
 	Ptr_queue temp;
 	int i;
@@ -442,7 +476,7 @@ void min_heapify(Ptr_queue* ptr_queue, int to_move, int n){
 		}
 		i++;
 	}
-}
+}*/
 
 
 
@@ -467,7 +501,9 @@ void dijkstra(uint** ptr_matr, Ptr_queue* ptr_queue, int n){
     uint ndis;
     uint curr, to_reach;
     int j, n_queue;
-
+	//modified contiene il numero dei nodi che sono stati modificati: se tale numero
+	// è maggiore di n, allora posso usare la min_heapify normale
+	//modified = 1; //lo 0 lo considero modificato
 	n_queue = n;
 	while(n_queue != 0){
 		//Seleziono il nodo di partenza
@@ -484,7 +520,10 @@ void dijkstra(uint** ptr_matr, Ptr_queue* ptr_queue, int n){
 					ptr_queue[to_reach] -> dist = ndis;
 					//D printf("Prima della min_heapify:\n");
 					//D print_priority_queue(ptr_queue, n_queue);
-					min_heapify(ptr_queue, to_reach, n_queue);
+
+					min_heapify_modified(ptr_queue, to_reach, n_queue);
+
+
 					//D printf("Dopo la min_heapify:\n");
 					//D print_priority_queue(ptr_queue, n_queue);
 				}
@@ -550,4 +589,58 @@ int somma(Ptr_queue* ptr_queue, int n){
 	}
 
 	return somma;
+}
+
+
+
+//Vedi slide 6 "data_structures_3"
+void max_heapify(Ptr_queue* ptr_queue, int to_move, int n){
+	uint left, right, posmin;
+	Ptr_queue temp;
+
+	//Il nodo 0 lo devo considerare come 1, altrimenti non trovo
+	// il left e il right
+	left = 2 * (to_move + 1) - 1;
+	right = 2 * (to_move + 1);
+
+
+	if(left < n && ptr_queue[left] -> dist > ptr_queue[to_move] -> dist){
+		posmin = left;
+	}
+	else{
+		posmin = to_move;
+	}
+
+	if(right < n && ptr_queue[right] -> dist > ptr_queue[posmin] -> dist){
+		posmin = right;
+	}
+
+	if(posmin != to_move){
+		temp = ptr_queue[to_move];
+		ptr_queue[to_move] = ptr_queue[posmin];
+		ptr_queue[posmin] = temp;
+		//D printf("Tra una max heapify e l'altra\n");
+		//D print_ranking(ptr_queue, n);
+		max_heapify(ptr_queue, posmin, n);
+	}
+}
+
+
+void max_heapify_modified(Ptr_queue* ptr_queue, int to_move, int n){
+	int parent;
+	Ptr_queue temp;
+
+	if(to_move == 0){
+		return;
+	}
+	parent = (int)((to_move + 1) / 2) - 1;
+
+	//D printf("%d\n", parent);
+	if(ptr_queue[parent] -> dist < ptr_queue[to_move] -> dist){
+		temp = ptr_queue[to_move];
+		ptr_queue[to_move] = ptr_queue[parent];
+		ptr_queue[parent] = temp;
+
+		max_heapify_modified(ptr_queue, parent, n);
+	}
 }
