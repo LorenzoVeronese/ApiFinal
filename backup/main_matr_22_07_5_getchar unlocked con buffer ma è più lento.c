@@ -17,7 +17,6 @@ PSEUDOCODICE
 #include <stdlib.h>
 #include <math.h>
 #include <string.h>
-#include <stdbool.h>
 #define MAXKEY 16
 
 
@@ -40,25 +39,21 @@ uint** create_adjacency_matr(int n);
 void build_adjacency_matr(uint** ptr_matr, int n);
 void print_adjacency_matr(uint** ptr_matr, int n);
 
-bool* create_checklist(int n);
+
 Ptr_queue* build_priority_queue(int n);
 void print_priority_queue(Ptr_queue* ptr_queue, int n);
 void clear_priority_queue(Ptr_queue* ptr_queue, int n);
 void min_heapify(Ptr_queue* ptr_queue, int to_move, int n);
 void min_heapify_modified(Ptr_queue* ptr_queue, int to_move, int n);
-uint search_in_priority_queue(Ptr_queue* ptr_queue, int to_search, int n, bool* checklist);
-void delete_element_priority_queue(Ptr_queue* ptr_queue, int to_remove, int* n, bool* checklist);
+uint search_in_priority_queue(Ptr_queue* ptr_queue, int to_search, int n);
+void delete_element_priority_queue(Ptr_queue* ptr_queue, int to_remove, int* n);
 
-void dijkstra(uint** ptr_matr, Ptr_queue* ptr_queue, int n, bool* checklist);
+void dijkstra(uint** ptr_matr, Ptr_queue* ptr_queue, int n);
 
 int somma(Ptr_queue* ptr_queue, int n);
 
 void max_heapify(Ptr_queue* ptr_queue, int to_move, int n);
 void max_heapify_modified(Ptr_queue* ptr_queue, int to_move, int n);
-
-void clear_checklist(bool* checklist, int n);
-
-void print_topk(Ptr_queue* ranking, int k);
 
 
 int main(){
@@ -69,9 +64,8 @@ int main(){
 	uint** ptr_matr; //array di puntatori alla liste
 	Ptr_queue* ptr_queue; //array (coda) di struct
 	int sum; //somma cammini minimi
-	int j, h, flag;
+	int i, j, h, flag;
 	int void_line;
-	bool* checklist;
 	char c;
 
 	flag = 0;
@@ -87,10 +81,10 @@ int main(){
 	//3.2 Costruisco queue (basta una volta sola) per algoritmo di Dijkstra
 	ptr_queue = build_priority_queue(n);
 	//D print_priority_queue(ptr_queue, n);
-	checklist = create_checklist(n);
 	j = 0;
     //3. AGGIUNGI GRAFO O TOPK
     //AggiungiGrafo
+	flockfile(stdin);
     while(1){
 		sum = 0;
 		//Leggo key word
@@ -102,24 +96,13 @@ int main(){
 			printf("\n");
 			flag = 0;
 		}
-		/*
-		sum = 0;
-		//Leggo key word
-        if(fgets(key_word, MAXKEY, stdin) == NULL){
-			break;
-		}
-		else if(flag == 1){
-			printf("\n");
-			flag = 0;
-		}*/
 
 		//caso AggiungiGrafo
         if (c == 'A'){
+			//Leggo grafo
 			while(c != '\n'){
 				c = getchar_unlocked();
 			}
-			//Leggo grafo
-
             build_adjacency_matr(ptr_matr, n);
 
 			//D print_adjacency_matr(ptr_matr, n);
@@ -135,13 +118,12 @@ int main(){
 
 
 			if(void_line == 0){
-				dijkstra(ptr_matr, ptr_queue, n, checklist);
+				dijkstra(ptr_matr, ptr_queue, n);
 
 				sum = somma(ptr_queue, n);
 				//D printf("somma[%d]: %d\n", j, sum);
 				//ripulisco la coda
 				clear_priority_queue(ptr_queue, n);
-				clear_checklist(checklist, n);
 				//D printf("---nodo fatto\n");
 			}
 			//D printf("la somma è: %d\n", sum);
@@ -155,20 +137,28 @@ int main(){
 			while(c != '\n'){
 				c = getchar_unlocked();
 			}
-			print_topk(ranking, k);
+			//D print_priority_queue(ranking, k);
+			if(ranking[0] -> key != (uint)INFINITY){
+				printf("%d", ranking[0] -> key);
+			}
+			for(i = 1; i < k; i++){
+				if(ranking[i] -> key != (uint)INFINITY){
+					printf(" %d", ranking[i] -> key);
+				}
+			}
 			flag = 1;
+			/*
+			if(!feof(stdin)){
+				printf("\n");
+			}
+			if(feof(stdin)){
+				break;
+			}*/
         }
     }
+	flockfile(stdin);
 
     return 0;
-}
-
-bool* create_checklist(int n){
-	bool* checklist;
-
-	checklist = (bool*)calloc(n, sizeof(bool));
-
-	return checklist;
 }
 
 
@@ -288,22 +278,58 @@ uint** create_adjacency_matr(int n){
 
 
 void build_adjacency_matr(uint** ptr_matr, int n){
-    uint i, j, h, num; //supporto
+    uint i, j, h, k, num; //supporto
 	char c;
-	char number[10];
+	char number[10], line[100000];
+	int line_len;
 	//uint len;
 
 	//Creo liste per ciascun nodo: nodo i-esimo collegato al j-esimo con costo num
 	for(i = 0; i < n; i++){
-		flockfile(stdin);
+		c = getchar_unlocked();
+		for(h = 0; c != '\n'; h++){
+			line[h] = c;
+			c = getchar_unlocked();
+		}
+		line[h] = ',';
+		line_len = h + 1;
+
 		//D printf("riga matrice: %s\n", line);
-		for(j = 0; j < n-1; j++){
+		h = 0; //cifra del numero letta
+		k = 0; //numero dei numeri letto
+		for(j = 0; j < line_len; j++){
+			if(line[j] != ','){
+				number[h] = line[j];
+				h++;
+			}
+			else{
+				//D printf("%s\n", number);
+				if(k == 0){
+					//D printf("non converto %s (%d)\n", number, h);
+				}
+				else if(i == k){
+					//D printf("non converto %s (%d)\n", number, h);
+	                ptr_matr[i][k - 1] = 0;
+	            }
+				else{
+					num = atoi_personal(number, h);
+	            	ptr_matr[i][k - 1] = num;
+					//D printf("convertito: %d\n", num);
+	            }
+				h = 0;
+				k++;
+			}
+
+			/*
+			for(k = 0; k < line_len; k++){
+
+			}
 			h = 0;
 			//c = fgetc(stdin);
 			c = getchar_unlocked();
-			while(c != ','){
+			for(h = 0; c != ','; h++){
 				//D printf("%c\n", c);
-				number[h] = c;
+				number[k + h] = c;
 				//c = fgetc(stdin);
 				c = getchar_unlocked();
 				h++;
@@ -329,7 +355,7 @@ void build_adjacency_matr(uint** ptr_matr, int n){
 
 			//memset(number, 0, h); peggio: 27.30% vs 26.86%
 
-			/*non necessario per come ho fatto atoi personal: togliendolo scendo a 26.08%
+			non necessario per come ho fatto atoi personal: togliendolo scendo a 26.08%
 			len = h;
 			for(h = 0; h < len; h++){
 				number[h] = 0;
@@ -338,6 +364,7 @@ void build_adjacency_matr(uint** ptr_matr, int n){
 
 		//L'ultimo numero lo leggo a parte
 		//if(scanf("%d\n", &num)){}
+		/*
 		h = 0;
 		//c = fgetc(stdin);
 		c = getchar_unlocked();
@@ -354,13 +381,13 @@ void build_adjacency_matr(uint** ptr_matr, int n){
 
 
 		//memset(number, 0, h);
-		/*
+
 		len = h;
 		for(h = 0; h < len; h++){
 			number[h] = 0;
 		}*/
 	}
-	flockfile(stdin);
+
 }
 
 
@@ -403,10 +430,8 @@ Ptr_queue* build_priority_queue(int n){
 }
 
 
-void delete_element_priority_queue(Ptr_queue* ptr_queue, int to_remove, int* n_queue, bool* checklist){
+void delete_element_priority_queue(Ptr_queue* ptr_queue, int to_remove, int* n_queue){
 	Ptr_queue temp;
-
-	checklist[ptr_queue[to_remove] -> key] = 1;
 
 	*n_queue = *n_queue - 1;
 	temp = ptr_queue[to_remove];
@@ -518,13 +543,10 @@ void min_heapify(Ptr_queue* ptr_queue, int to_move, int n){
 
 
 
-uint search_in_priority_queue(Ptr_queue* ptr_queue, int to_search, int n, bool* checklist){
+uint search_in_priority_queue(Ptr_queue* ptr_queue, int to_search, int n){
 	uint i;
 
 
-	if(checklist[to_search] == 1){
-		return (uint)INFINITY;
-	}
 	for(i = 0; i < n; i++){
 		if(ptr_queue[i] -> key == to_search){
 			return i;
@@ -533,11 +555,10 @@ uint search_in_priority_queue(Ptr_queue* ptr_queue, int to_search, int n, bool* 
 
 	//non lo trovo
 	return (uint)INFINITY;
-
 }
 
 
-void dijkstra(uint** ptr_matr, Ptr_queue* ptr_queue, int n, bool* checklist){
+void dijkstra(uint** ptr_matr, Ptr_queue* ptr_queue, int n){
     uint* curr_node;
     uint ndis;
     uint curr, to_reach;
@@ -557,7 +578,7 @@ void dijkstra(uint** ptr_matr, Ptr_queue* ptr_queue, int n, bool* checklist){
 			if(curr_node[j] != 0){
 				ndis = ptr_queue[0] -> dist + curr_node[j];
 
-				to_reach = search_in_priority_queue(ptr_queue, j + 1, n_queue, checklist);
+				to_reach = search_in_priority_queue(ptr_queue, j + 1, n_queue);
 				if (to_reach != (uint)INFINITY && ptr_queue[to_reach] -> dist > ndis){
 					ptr_queue[to_reach] -> dist = ndis;
 					//D printf("Prima della min_heapify:\n");
@@ -572,7 +593,7 @@ void dijkstra(uint** ptr_matr, Ptr_queue* ptr_queue, int n, bool* checklist){
 			}
 		}
 		//Elimino dalla coda il nodo di partenza
-		delete_element_priority_queue(ptr_queue, 0, &n_queue, checklist);
+		delete_element_priority_queue(ptr_queue, 0, &n_queue);
 		//D printf("Elimino il primo\n");
 		//D printf("Prima della min_heapify esterna:\n");
 		//D print_priority_queue(ptr_queue, n_queue);
@@ -689,37 +710,4 @@ void max_heapify_modified(Ptr_queue* ptr_queue, int to_move, int n){
 
 		max_heapify_modified(ptr_queue, parent, n);
 	}
-}
-
-
-void clear_checklist(bool* checklist, int n){
-	int i;
-
-	for(i = 1; i < n; i++){
-		checklist[i] = 0;
-	}
-}
-
-
-
-void print_topk(Ptr_queue* ranking, int k){
-	int i;
-
-	//D print_priority_queue(ranking, k);
-	if(ranking[0] -> key != (uint)INFINITY){
-		printf("%d", ranking[0] -> key);
-	}
-	for(i = 1; i < k; i++){
-		if(ranking[i] -> key != (uint)INFINITY){
-			printf(" %d", ranking[i] -> key);
-		}
-	}
-
-	/*
-	if(!feof(stdin)){
-		printf("\n");
-	}
-	if(feof(stdin)){
-		break;
-	}*/
 }
