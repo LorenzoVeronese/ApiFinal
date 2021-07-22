@@ -496,7 +496,7 @@ void min_heapify_modified(struct Queue* ptr_queue, struct Hash* hash, int to_mov
 	int parent;
 	struct Queue temp;
 
-	parent = (int)(to_move / 2);
+	parent = (int)((to_move - 1) / 2);
 
 	if(parent != 0 && ptr_queue[parent].dist > ptr_queue[to_move].dist){
 		//Modifico hash table
