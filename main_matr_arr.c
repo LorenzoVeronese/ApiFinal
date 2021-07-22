@@ -40,14 +40,17 @@ uint** create_adjacency_matr(int n);
 void build_adjacency_matr(uint** ptr_matr, int n);
 void print_adjacency_matr(uint** ptr_matr, int n);
 
-bool* create_checklist(int n);
-Ptr_queue* build_priority_queue(int n);
-void print_priority_queue(Ptr_queue* ptr_queue, int n);
-void clear_priority_queue(Ptr_queue* ptr_queue, int n);
+
+
 void min_heapify(Ptr_queue* ptr_queue, int to_move, int n);
 void min_heapify_modified(Ptr_queue* ptr_queue, int to_move, int n);
 uint search_in_priority_queue(Ptr_queue* ptr_queue, int to_search, int n, bool* checklist);
 void delete_element_priority_queue(Ptr_queue* ptr_queue, int to_remove, int* n, bool* checklist);
+
+bool* create_checklist(int n);
+uint* create_medium(int n);
+uint* create_dist_queue(int n);
+
 
 void dijkstra(uint** ptr_matr, Ptr_queue* ptr_queue, int n, bool* checklist);
 
@@ -115,24 +118,10 @@ int main(){
 
 		//caso AggiungiGrafo
         if (c == 'A'){
-			/*while(c != '\n'){
+			while(c != '\n'){
 				c = getchar_unlocked();
-			}*/
+			}
 			//Leggo grafo
-			//leggermente più veloce di while(c!='\n')
-			getchar_unlocked();
-			getchar_unlocked();
-			getchar_unlocked();
-			getchar_unlocked();
-			getchar_unlocked();
-			getchar_unlocked();
-			getchar_unlocked();
-			getchar_unlocked();
-			getchar_unlocked();
-			getchar_unlocked();
-			getchar_unlocked();
-			getchar_unlocked();
-			getchar_unlocked();
 
             build_adjacency_matr(ptr_matr, n);
 
@@ -166,15 +155,9 @@ int main(){
         }
         //caso TopK
         else{
-			/*
 			while(c != '\n'){
 				c = getchar_unlocked();
-			}*/
-			getchar_unlocked();
-			getchar_unlocked();
-			getchar_unlocked();
-			getchar_unlocked();
-
+			}
 			print_topk(ranking, k);
 			flag = 1;
         }
@@ -291,6 +274,32 @@ void print_ranking(Ptr_queue* ptr_queue, int n){
 }
 
 
+uint* create_medium(int n){
+	uint* medium;
+	int i;
+
+	medium = (uint*)malloc(n * sizeof(uint));
+	for(i = 0; i < n; i++){
+		medium[i] = i;
+	}
+
+	return medium;
+}
+
+
+uint* create_dist_queue(int n){
+	uint* dist_queue;
+	int i;
+
+	dist_queue = (uint*)malloc(n * sizeof(uint));
+
+	dist_queue[0] = (uint)INFINITY;
+	for(i = 1; i < n; i++){
+		dist_queue[i] = (uint)INFINITY;
+	}
+
+	return dist_queue;
+}
 
 
 uint** create_adjacency_matr(int n){
@@ -557,7 +566,7 @@ uint search_in_priority_queue(Ptr_queue* ptr_queue, int to_search, int n, bool* 
 }
 
 
-void dijkstra(uint** ptr_matr, Ptr_queue* ptr_queue, int n, bool* checklist){
+void dijkstra(uint** ptr_matr, uint* dist_queue, int n, bool* checklist){
     uint* curr_node;
     uint ndis;
     uint curr, to_reach;
@@ -568,7 +577,7 @@ void dijkstra(uint** ptr_matr, Ptr_queue* ptr_queue, int n, bool* checklist){
 	n_queue = n;
 	while(n_queue != 0){
 		//Seleziono il nodo di partenza
-		curr = ptr_queue[0] -> key;
+		curr = dist_queue[0];
 
 		//Analizzo i successori del nodo corrente
 		curr_node = ptr_matr[curr];
