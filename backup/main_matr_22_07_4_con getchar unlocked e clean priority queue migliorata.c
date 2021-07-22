@@ -60,13 +60,12 @@ int main(){
     int n, //numero nodi
         k; //lunghezza classifica
     Ptr_queue* ranking; //array*1 con k migliori
-    //char key_word[MAXKEY]; //parola di stacco
+    char key_word[MAXKEY]; //parola di stacco
 	uint** ptr_matr; //array di puntatori alla liste
 	Ptr_queue* ptr_queue; //array (coda) di struct
 	int sum; //somma cammini minimi
 	int i, j, h, flag;
 	int void_line;
-	char c;
 
 	flag = 0;
 
@@ -84,12 +83,10 @@ int main(){
 	j = 0;
     //3. AGGIUNGI GRAFO O TOPK
     //AggiungiGrafo
-	flockfile(stdin);
     while(1){
 		sum = 0;
 		//Leggo key word
-		c = getchar_unlocked();
-        if(c == EOF){
+        if(fgets(key_word, MAXKEY, stdin) == NULL){
 			break;
 		}
 		else if(flag == 1){
@@ -98,11 +95,9 @@ int main(){
 		}
 
 		//caso AggiungiGrafo
-        if (c == 'A'){
+        if (key_word[0] == 'A'){
 			//Leggo grafo
-			while(c != '\n'){
-				c = getchar_unlocked();
-			}
+
             build_adjacency_matr(ptr_matr, n);
 
 			//D print_adjacency_matr(ptr_matr, n);
@@ -134,9 +129,6 @@ int main(){
         }
         //caso TopK
         else{
-			while(c != '\n'){
-				c = getchar_unlocked();
-			}
 			//D print_priority_queue(ranking, k);
 			if(ranking[0] -> key != (uint)INFINITY){
 				printf("%d", ranking[0] -> key);
@@ -156,7 +148,6 @@ int main(){
 			}*/
         }
     }
-	flockfile(stdin);
 
     return 0;
 }
@@ -285,6 +276,7 @@ void build_adjacency_matr(uint** ptr_matr, int n){
 
 	//Creo liste per ciascun nodo: nodo i-esimo collegato al j-esimo con costo num
 	for(i = 0; i < n; i++){
+		flockfile(stdin);
 		//D printf("riga matrice: %s\n", line);
 		for(j = 0; j < n-1; j++){
 			h = 0;
@@ -349,7 +341,7 @@ void build_adjacency_matr(uint** ptr_matr, int n){
 			number[h] = 0;
 		}*/
 	}
-
+	flockfile(stdin);
 }
 
 
