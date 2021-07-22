@@ -280,11 +280,13 @@ void build_adjacency_matr(uint** ptr_matr, int n){
 		//D printf("riga matrice: %s\n", line);
 		for(j = 0; j < n-1; j++){
 			h = 0;
+			//c = fgetc(stdin);
 			c = getchar_unlocked();
 			while(c != ','){
 				//D printf("%c\n", c);
 				number[h] = c;
-				c = fgetc(stdin);
+				//c = fgetc(stdin);
+				c = getchar_unlocked();
 				h++;
 			}
 
@@ -318,11 +320,13 @@ void build_adjacency_matr(uint** ptr_matr, int n){
 		//L'ultimo numero lo leggo a parte
 		//if(scanf("%d\n", &num)){}
 		h = 0;
+		//c = fgetc(stdin);
 		c = getchar_unlocked();
 		while(c != '\n'){
 			//D printf("%c\n", c);
 			number[h] = c;
-			c = fgetc(stdin);
+			//c = fgetc(stdin);
+			c = getchar_unlocked();
 			h++;
 		}
 		num = atoi_personal(number, h);
@@ -556,12 +560,16 @@ void dijkstra(uint** ptr_matr, Ptr_queue* ptr_queue, int n){
 void clear_priority_queue(Ptr_queue* ptr_queue, int n){
 	int i;
 
+	//Metto il primo nodo alla fine (dove c'è lo zero)
+	ptr_queue[n-1] -> key = ptr_queue[0] -> key;
+	ptr_queue[n-1] -> dist = (uint)INFINITY;
 
 	ptr_queue[0] -> key = 0;
 	ptr_queue[0] -> dist = 0;
-	for(i = 1; i < n; i++){
-		ptr_queue[i] -> key = i;
+
+	for(i = 1; i < n - 1; i++){
 		ptr_queue[i] -> dist = (uint)INFINITY;
+
 	}
 	/*
 	i = 1;
