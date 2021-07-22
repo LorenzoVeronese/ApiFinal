@@ -33,6 +33,7 @@ uint atoi_personal(char* str, int h);
 
 Ptr_queue* build_ranking(int k);
 void add_ranked(Ptr_queue* ranking, int graph_num, int distance, int k);
+void print_ranking(Ptr_queue* ptr_queue, int n);
 
 uint** create_adjacency_matr(int n);
 void build_adjacency_matr(uint** ptr_matr, int n);
@@ -120,7 +121,7 @@ int main(){
 			//D printf("la somma è: %d\n", sum);
 			//Inserisco somma in array*1
 			add_ranked(ranking, j, sum, k);
-
+			//D print_ranking(ranking, k);
 			j++;
         }
         //caso TopK
@@ -236,6 +237,18 @@ void add_ranked(Ptr_queue* ranking, int graph_num, int distance, int k){
 		ranking[i] -> dist = distance;
 	}*/
 }
+
+
+void print_ranking(Ptr_queue* ptr_queue, int n){
+	int i;
+
+	printf("Ranking:\n");
+	for(i = 0; i < n; i++){
+		printf("%d, %d\n", ptr_queue[i] -> key, ptr_queue[i] -> dist);
+	}
+}
+
+
 
 
 uint** create_adjacency_matr(int n){
@@ -606,8 +619,9 @@ void max_heapify(Ptr_queue* ptr_queue, int to_move, int n){
 		temp = ptr_queue[to_move];
 		ptr_queue[to_move] = ptr_queue[posmin];
 		ptr_queue[posmin] = temp;
-
-		min_heapify(ptr_queue, posmin, n);
+		//D printf("Tra una max heapify e l'altra\n");
+		//D print_ranking(ptr_queue, n);
+		max_heapify(ptr_queue, posmin, n);
 	}
 }
 
@@ -616,8 +630,12 @@ void max_heapify_modified(Ptr_queue* ptr_queue, int to_move, int n){
 	int parent;
 	Ptr_queue temp;
 
-	parent = (int)((to_move + 1) / 2);
+	if(to_move == 0){
+		return;
+	}
+	parent = (int)((to_move + 1) / 2) - 1;
 
+	//D printf("%d\n", parent);
 	if(ptr_queue[parent] -> dist < ptr_queue[to_move] -> dist){
 		temp = ptr_queue[to_move];
 		ptr_queue[to_move] = ptr_queue[parent];
