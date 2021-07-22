@@ -280,7 +280,7 @@ void build_adjacency_matr(uint** ptr_matr, int n){
 		//D printf("riga matrice: %s\n", line);
 		for(j = 0; j < n-1; j++){
 			h = 0;
-			c = fgetc(stdin);
+			c = getchar_unlocked();
 			while(c != ','){
 				//D printf("%c\n", c);
 				number[h] = c;
@@ -318,7 +318,7 @@ void build_adjacency_matr(uint** ptr_matr, int n){
 		//L'ultimo numero lo leggo a parte
 		//if(scanf("%d\n", &num)){}
 		h = 0;
-		c = fgetc(stdin);
+		c = getchar_unlocked();
 		while(c != '\n'){
 			//D printf("%c\n", c);
 			number[h] = c;
