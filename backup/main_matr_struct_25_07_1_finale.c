@@ -37,17 +37,17 @@ uint atoi_personal(char* str, int h);
 //Ranking
 struct Queue* build_ranking(int k);
 void add_ranked(struct Queue* ranking, int graph_num, int distance, int k);
-//D void print_ranking(struct Queue* ptr_queue, int n);
+void print_ranking(struct Queue* ptr_queue, int n);
 
 //Adjacency matrix
 uint** create_adjacency_matr(int n);
 void build_adjacency_matr(uint** ptr_matr, int n);
-//D void print_adjacency_matr(uint** ptr_matr, int n);
+void print_adjacency_matr(uint** ptr_matr, int n);
 
 //Heap: max-heap for ranking and min-heap for Dijkstra's queue
 struct Hash* create_hash(int n);
 struct Queue* build_priority_queue(int n);
-//D void print_priority_queue(struct Queue* ptr_queue, int n);
+void print_priority_queue(struct Queue* ptr_queue, int n);
 void clear_priority_queue(struct Queue* ptr_queue, struct Hash* hash, int n);
 void min_heapify(struct Queue* ptr_queue, struct Hash* hash, int to_move, int n);
 void min_heapify_modified(struct Queue* ptr_queue, struct Hash* hash, int to_move, int n);
@@ -98,7 +98,7 @@ int main(){
     while(1){
 		sum = 0;
 		//Leggo key word
-		c = getchar();
+		c = getchar_unlocked();
         if(c == EOF){
 			break;
 		}
@@ -119,10 +119,9 @@ int main(){
 
 		//caso AggiungiGrafo
         if (c == 'A'){
-			while(c != '\n'){
-				c = getchar();
-			}
-			/*
+			/*while(c != '\n'){
+				c = getchar_unlocked();
+			}*/
 			//Leggo grafo
 			//leggermente più veloce di while(c!='\n')
 			getchar_unlocked();
@@ -138,7 +137,7 @@ int main(){
 			getchar_unlocked();
 			getchar_unlocked();
 			getchar_unlocked();
-			*/
+
             build_adjacency_matr(ptr_matr, n);
 
 			//D print_adjacency_matr(ptr_matr, n);
@@ -151,6 +150,7 @@ int main(){
 					break;
 				}
 			}
+
 
 			if(void_line == 0){
 				dijkstra(ptr_matr, ptr_queue, hash, n);
@@ -170,14 +170,14 @@ int main(){
         }
         //caso TopK
         else{
-
+			/*
 			while(c != '\n'){
-				c = getchar();
-			}/*
+				c = getchar_unlocked();
+			}*/
 			getchar_unlocked();
 			getchar_unlocked();
 			getchar_unlocked();
-			getchar_unlocked();*/
+			getchar_unlocked();
 
 			print_topk(ranking, k);
 			flag = 1;
@@ -204,7 +204,6 @@ int power(int base, int exp){
 
 	return res;
 }
-
 
 uint atoi_personal(char* str, int h){
 	int i;
@@ -252,9 +251,31 @@ void add_ranked(struct Queue* ranking, int graph_num, int distance, int k){
 			max_heapify(ranking, 0, k);
 		}
 	}
+	/*
+	if(ranking[k - 1] -> key != (uint)INFINITY){
+		//Cerco il max
+		max = ranking[0] -> dist;
+		max_index = 0;
+		for(i = 1; i < k; i++){
+			if(max < ranking[i] -> dist){
+				max = ranking[i] -> dist;
+				max_index = i;
+			}
+		}
+		if(distance < ranking[max_index] -> dist){
+			ranking[max_index] -> key = graph_num;
+			ranking[max_index] -> dist = distance;
+		}
+
+	}
+	else{
+		for(i = 0; ranking[i] -> key != (uint)INFINITY; i++){}
+		ranking[i] -> key = graph_num;
+		ranking[i] -> dist = distance;
+	}*/
 }
 
-/*
+
 void print_ranking(struct Queue* ptr_queue, int n){
 	int i;
 
@@ -263,7 +284,7 @@ void print_ranking(struct Queue* ptr_queue, int n){
 		printf("%d, %d\n", ptr_queue[i].key, ptr_queue[i].dist);
 	}
 }
-*/
+
 
 struct Hash* create_hash(int n){
 	struct Hash* hash;
@@ -304,17 +325,17 @@ void build_adjacency_matr(uint** ptr_matr, int n){
 
 	//Creo liste per ciascun nodo: nodo i-esimo collegato al j-esimo con costo num
 	for(i = 0; i < n; i++){
-		//flockfile(stdin);
+		flockfile(stdin);
 		//D printf("riga matrice: %s\n", line);
 		for(j = 0; j < n-1; j++){
 			h = 0;
 			//c = fgetc(stdin);
-			c = getchar();
+			c = getchar_unlocked();
 			while(c != ','){
 				//D printf("%c\n", c);
 				number[h] = c;
 				//c = fgetc(stdin);
-				c = getchar();
+				c = getchar_unlocked();
 				h++;
 			}
 
@@ -349,12 +370,12 @@ void build_adjacency_matr(uint** ptr_matr, int n){
 		//if(scanf("%d\n", &num)){}
 		h = 0;
 		//c = fgetc(stdin);
-		c = getchar();
+		c = getchar_unlocked();
 		while(c != '\n'){
 			//D printf("%c\n", c);
 			number[h] = c;
 			//c = fgetc(stdin);
-			c = getchar();
+			c = getchar_unlocked();
 			h++;
 		}
 		num = atoi_personal(number, h);
@@ -369,10 +390,12 @@ void build_adjacency_matr(uint** ptr_matr, int n){
 			number[h] = 0;
 		}*/
 	}
-	//flockfile(stdin);
+	flockfile(stdin);
 }
 
-/*
+
+
+//D
 void print_adjacency_matr(uint** ptr_matr, int n){
 	int i, j;
 
@@ -384,7 +407,7 @@ void print_adjacency_matr(uint** ptr_matr, int n){
         printf("\n");
 	}
 }
-*/
+
 
 struct Queue* build_priority_queue(int n){
 	struct Queue* ptr_queue;
@@ -423,7 +446,7 @@ void delete_element_priority_queue(struct Queue* ptr_queue, struct Hash* hash, i
 
 }
 
-/*
+
 void print_priority_queue(struct Queue* ptr_queue, int n){
 	int i;
 
@@ -432,9 +455,9 @@ void print_priority_queue(struct Queue* ptr_queue, int n){
 		printf("%d, %d\n", ptr_queue[i].key, ptr_queue[i].dist);
 	}
 }
-*/
 
 
+//Vedi slide 6 "data_structures_3"
 void min_heapify(struct Queue* ptr_queue, struct Hash* hash, int to_move, int n){
 	uint left, right, posmin;
 	struct Queue temp;
@@ -486,17 +509,6 @@ void min_heapify_modified(struct Queue* ptr_queue, struct Hash* hash, int to_mov
 		ptr_queue[parent] = temp;
 
 		min_heapify_modified(ptr_queue, hash, parent, n);
-	}
-}
-
-
-uint search_in_priority_queue(struct Queue* ptr_queue, struct Hash* hash, int to_search){
-
-	if(hash[to_search].visited == 0){
-		return hash[to_search].pos;
-	}
-	else{
-		return (uint)INFINITY;
 	}
 }
 
@@ -564,8 +576,31 @@ void clear_priority_queue(struct Queue* ptr_queue, struct Hash* hash, int n){
 		ptr_queue[i].dist = (uint)INFINITY;
 
 	}
-}
+	/*
+	i = 1;
+	if(ptr_queue[0] != NULL){
+		ptr_queue[0] -> key = 0;
+		ptr_queue[0] -> dist = 0;
+	}
+	else{
+		i = 0;
+	}
 
+	while(ptr_queue[i] != NULL){
+		ptr_queue[i] -> key = i;
+		ptr_queue[i] -> dist = (uint)INFINITY;
+
+		i++;
+	}
+	while(i < n){
+		ptr_queue[i] = (Ptr_queue)malloc(sizeof(Ptr_queue));
+		ptr_queue[i] -> key = i;
+		ptr_queue[i] -> dist = (uint)INFINITY;
+
+		i++;
+	}*/
+
+}
 
 int somma(struct Queue* ptr_queue, int n){
 	int i, somma;
@@ -582,6 +617,8 @@ int somma(struct Queue* ptr_queue, int n){
 }
 
 
+
+//Vedi slide 6 "data_structures_3"
 void max_heapify(struct Queue* ptr_queue, int to_move, int n){
 	uint left, right, posmin;
 	struct Queue temp;
@@ -634,6 +671,7 @@ void max_heapify_modified(struct Queue* ptr_queue, int to_move, int n){
 }
 
 
+
 void print_topk(struct Queue* ranking, int k){
 	int i;
 
@@ -647,11 +685,11 @@ void print_topk(struct Queue* ranking, int k){
 		}
 	}
 
-
-	//if(!feof(stdin)){
-	//	printf("\n");
-	//}
-	//if(feof(stdin)){
-	//	break;
-	//}
+	/*
+	if(!feof(stdin)){
+		printf("\n");
+	}
+	if(feof(stdin)){
+		break;
+	}*/
 }
